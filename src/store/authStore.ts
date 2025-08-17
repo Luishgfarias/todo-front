@@ -13,6 +13,7 @@ interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isLoadingProfile: boolean;
 
   // Actions
   login: (data: LoginSchema) => Promise<void>;
@@ -31,6 +32,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   token: localStorage.getItem("token"),
   isAuthenticated: !!localStorage.getItem("token"),
   isLoading: false,
+  isLoadingProfile: false,
 
   // Login
   login: async (data: LoginSchema) => {
@@ -89,25 +91,33 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   // Atualizar dados do usuário
   updateMe: async (data: UpdateUserSchema) => {
+    set({ isLoadingProfile: true });
     try {
       const updatedUser = await authService.updateMe(data);
       set({ user: updatedUser });
+      toast.success("Perfil atualizado com sucesso");
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
       toast.error(error instanceof AxiosError ? error.response?.data : "Erro ao atualizar usuário");
       throw error;
+    } finally {
+      set({ isLoadingProfile: false });
     }
   },
 
   // Deletar conta
   deleteMe: async () => {
+    set({ isLoadingProfile: true });
     try {
       await authService.deleteMe();
+      toast.success("Conta deletada com sucesso");
       get().logout(); // Logout após deletar conta
     } catch (error) {
       console.error("Erro ao deletar conta:", error);
       toast.error(error instanceof AxiosError ? error.response?.data : "Erro ao deletar conta");
       throw error;
+    } finally {
+      set({ isLoadingProfile: false });
     }
   },
   // TODO: Implementar refresh token

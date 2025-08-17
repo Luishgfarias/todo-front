@@ -5,6 +5,7 @@ import Input from "../../components/input"
 import Button from "../../components/button"
 import { taskSearchParamsSchema, type TaskSearchParams } from "../../schemas/tasks"
 import { useTaskStore } from "../../store/taskStore"
+import { FaSearch } from "react-icons/fa"
 
 const SearchBar = () => {
     const { register, handleSubmit, watch } = useForm({
@@ -27,9 +28,13 @@ const SearchBar = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex gap-2 w-full">
-            <Input placeholder="Pesquisar" className="w-full" {...register("titulo")} />
-            <Button type="submit" className="w-1/4">Pesquisar</Button>
-            
+            <Input placeholder="Pesquisar" className="flex-1" {...register("titulo")} />
+            <Button type="submit" className="px-3 py-2 text-sm md:px-4 md:text-base whitespace-nowrap">
+                <span className="hidden sm:inline">Pesquisar</span>
+                <span className="sm:hidden">
+                    <FaSearch />
+                </span>
+            </Button>
         </form>
     )
 }

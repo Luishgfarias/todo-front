@@ -58,7 +58,7 @@ const CardTask = (task: Task) => {
     const isDisabled = isAnyCardLoading && !isThisCardLoading;
 
     return (
-        <div className={`flex justify-between items-center w-full p-3 bg-white border-2 rounded-lg transition-all ${borderColor()} ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md cursor-pointer'}`}>
+        <div className={`flex justify-between items-center w-full p-3 gap-2 bg-white border-2 rounded-lg transition-all ${borderColor()} ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md cursor-pointer'}`}>
             <input
                 type="checkbox"
                 checked={selectedTasks.includes(task.id)}

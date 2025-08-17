@@ -41,13 +41,13 @@ const TasksPage = () => {
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
-                <Button variant="success" className="w-10 h-10 flex items-center justify-center" onClick={() => navigate("/tarefas/nova")}>
+                <Button variant="success" className="w-10 h-10 flex items-center justify-center flex-shrink-0" onClick={() => navigate("/tarefas/nova")}>
                     <FaPlus />
                 </Button>
                 <SearchBar />
                 {selectedTasks.length > 0 && (
-                    <Button variant="danger" className="w-1/4 flex items-center justify-center gap-2" onClick={handleDeleteSelectedTasks}>
-                        Deletar
+                    <Button variant="danger" className="flex items-center justify-center gap-1 px-3 py-2 whitespace-nowrap" onClick={handleDeleteSelectedTasks}>
+                        <span className="hidden sm:inline">Deletar</span>
                         <FaTrashAlt />
                     </Button>
                 )}

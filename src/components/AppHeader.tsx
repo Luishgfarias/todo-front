@@ -32,7 +32,7 @@ export function AppHeader() {
         <>
             {isAuthenticated ? (
                 <div className="flex items-center justify-between w-full">
-                    <img src={logo} alt="logo" className="mb-4" />
+                    <img src={logo} alt="logo" className="mb-4 h-12 w-auto" />
                     <div className="flex gap-2">
                         {isTasksPage ? <Button variant="success" onClick={() => navigate("/perfil")}>Perfil</Button> : <Button onClick={() => navigate("/")}>Tarefas</Button>}
                         <Button variant="danger" onClick={handleLogout}>Sair</Button>
