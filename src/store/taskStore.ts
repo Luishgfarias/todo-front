@@ -18,6 +18,8 @@ interface TaskState {
   totalTasks: number;
   searchTerm: string;
   isLoading: boolean;
+  isLoadingOperation: boolean;
+  loadingTaskId: number | null;
   task: FullTask | null;
   selectedTasks: number[];
   // Actions
@@ -42,6 +44,8 @@ export const useTaskStore = create<TaskState>()(
   totalTasks: 0,
   searchTerm: "",
   isLoading: false,
+  isLoadingOperation: false,
+  loadingTaskId: null,
   task: null,
   fetchTasks: async (params?: TaskSearchParams) => {
     // Se já temos dados persistidos e não mudaram os parâmetros, não faz nova requisição
@@ -77,6 +81,7 @@ export const useTaskStore = create<TaskState>()(
   },
 
   taskByID: async (id: number) => {
+    set({ loadingTaskId: id });
     try {
       const response = await taskService.getTaskById(id);
       set({ task: response });
@@ -87,10 +92,13 @@ export const useTaskStore = create<TaskState>()(
           : "Erro ao buscar tarefa"
       );
       console.error("Erro ao buscar tarefa:", error);
+    } finally {
+      set({ loadingTaskId: null });
     }
   },
 
   addTask: async (data: CreateTaskData) => {
+    set({ isLoadingOperation: true });
     try {
       const response = await taskService.addTask(data);
       set({ tasks: [...get().tasks, response] });
@@ -102,10 +110,13 @@ export const useTaskStore = create<TaskState>()(
           : "Erro ao adicionar tarefa"
       );
       console.error("Erro ao adicionar tarefa:", error);
+    } finally {
+      set({ isLoadingOperation: false });
     }
   },
 
   updateTask: async (id: number, data: UpdateTaskData) => {
+    set({ isLoadingOperation: true });
     try {
       const response = await taskService.updateTask(id, data);
       set({
@@ -119,6 +130,8 @@ export const useTaskStore = create<TaskState>()(
           : "Erro ao atualizar tarefa"
       );
       console.error("Erro ao atualizar tarefa:", error);
+    } finally {
+      set({ isLoadingOperation: false });
     }
   },
 
@@ -188,7 +201,7 @@ export const useTaskStore = create<TaskState>()(
         totalPages: state.totalPages,
         totalTasks: state.totalTasks,
         searchTerm: state.searchTerm,
-        // Não persiste: isLoading, task, selectedTasks
+        // Não persiste: isLoading, isLoadingOperation, loadingTaskId, task, selectedTasks
       }),
       storage: {
         getItem: (name) => {

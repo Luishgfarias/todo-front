@@ -2,13 +2,14 @@ import { useEffect } from "react"
 import { useTaskStore } from "../../store/taskStore"
 import SearchBar from "./searchBar"
 import CardTask from "../../components/cardTask"
+import Loading from "../../components/loading"
 import { FaPlus, FaTrashAlt } from "react-icons/fa"
 import Button from "../../components/button"
 import Swal from "sweetalert2"
 import Pagination from "../../components/pagination"
 import { useNavigate } from "react-router-dom";
 const TasksPage = () => {
-    const { tasks, fetchTasks, selectedTasks, deleteMultipleTasks, currentPage, totalPages, searchTerm } = useTaskStore()
+    const { tasks, fetchTasks, selectedTasks, deleteMultipleTasks, currentPage, totalPages, searchTerm, isLoading } = useTaskStore()
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -51,10 +52,16 @@ const TasksPage = () => {
                     </Button>
                 )}
             </div>
-            {tasks.map((task) => (
-                <CardTask key={task.id} {...task} />
-            ))}
-            <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
+            {isLoading ? (
+                <Loading message="Carregando tarefas..." />
+            ) : (
+                <>
+                    {tasks.map((task) => (
+                        <CardTask key={task.id} {...task} />
+                    ))}
+                    <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
+                </>
+            )}
         </div>
     )
 }

@@ -25,13 +25,6 @@ export function AppHeader() {
 
         if (result.isConfirmed) {
             logout();
-            Swal.fire({
-                title: 'Desconectado!',
-                text: 'Você foi desconectado com sucesso.',
-                icon: 'success',
-                timer: 1500,
-                showConfirmButton: false
-            });
         }
     }
 

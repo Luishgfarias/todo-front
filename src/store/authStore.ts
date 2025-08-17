@@ -12,6 +12,7 @@ interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
 
   // Actions
   login: (data: LoginSchema) => Promise<void>;
@@ -29,9 +30,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   token: localStorage.getItem("token"),
   isAuthenticated: !!localStorage.getItem("token"),
+  isLoading: false,
 
   // Login
   login: async (data: LoginSchema) => {
+    set({ isLoading: true });
     try {
       const response = await authService.login(data);
       const { token, user } = response;
@@ -43,6 +46,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       console.error("Erro no login:", error);
       toast.error(error instanceof AxiosError ? error.response?.data : "Erro ao fazer login");
       throw error;
+    } finally {
+      set({ isLoading: false });
     }
   },
 

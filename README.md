@@ -131,9 +131,14 @@ cd todo-front
 # Instale as dependências
 npm install
 
+# Configure a variável de ambiente (opcional)
+echo "VITE_API_BASE_URL=https://todo-api-123k.onrender.com" > .env
+
 # Execute em modo desenvolvimento
 npm run dev
 ```
+
+> **Nota**: A aplicação já está configurada para usar a API em produção ([https://todo-api-123k.onrender.com](https://todo-api-123k.onrender.com/)). O arquivo `.env` é opcional para desenvolvimento local.
 
 ### Build para Produção
 ```bash

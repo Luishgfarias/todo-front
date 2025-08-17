@@ -6,11 +6,12 @@ import { useTaskStore } from "../../store/taskStore"
 import { createTaskSchema, updateTaskSchema, type CreateTaskData, type UpdateTaskData } from "../../schemas/tasks"
 import Button from "../../components/button"
 import Input from "../../components/input"
+import Loading from "../../components/loading"
 
 const TaskFormPage = () => {
     const { id } = useParams()
     const navigate = useNavigate()
-    const { task, addTask, updateTask } = useTaskStore()
+    const { task, addTask, updateTask, isLoadingOperation } = useTaskStore()
     
     const isEditing = !!id
     const schema = isEditing ? updateTaskSchema : createTaskSchema
@@ -114,14 +115,19 @@ const TaskFormPage = () => {
                 </div>
 
                 <div className="flex justify-between gap-4 mt-4">
-                    <Button type="button" onClick={handleBack} className="w-1/3">
+                    <Button type="button" onClick={handleBack} className="w-1/3" disabled={isLoadingOperation}>
                         Cancelar
                     </Button>
-                    <Button type="submit" variant="success" className="w-2/3">
-                        {isEditing ? "Atualizar Tarefa" : "Criar Tarefa"}
+                    <Button type="submit" variant="success" className="w-2/3" disabled={isLoadingOperation}>
+                        {isLoadingOperation ? "Processando..." : (isEditing ? "Atualizar Tarefa" : "Criar Tarefa")}
                     </Button>
                 </div>
             </form>
+            {isLoadingOperation && (
+                <div className="mt-4">
+                    <Loading message={isEditing ? "Atualizando tarefa..." : "Criando tarefa..."} />
+                </div>
+            )}
         </div>
     )
 }
