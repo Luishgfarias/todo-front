@@ -2,6 +2,7 @@ import type { Task } from "../schemas/tasks"
 import { FaCheck, FaTrashAlt } from "react-icons/fa";
 import { useTaskStore } from "../store/taskStore";
 import Loading from "./loading";
+import { formatDateForDisplay } from "../lib/dateUtils";
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
 const CardTask = (task: Task) => {
@@ -79,7 +80,7 @@ const CardTask = (task: Task) => {
                 >
                     <div className="flex-1">
                         <h1 className="font-medium text-gray-800">{task.titulo}</h1>
-                        <p className="text-sm text-gray-500">{new Date(task.dataParaConclusao).toLocaleDateString("pt-BR")}</p>
+                        <p className="text-sm text-gray-500">{formatDateForDisplay(task.dataParaConclusao)}</p>
                     </div>
                 </button>
             )}

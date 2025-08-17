@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTaskStore } from "../../store/taskStore"
 import { createTaskSchema, updateTaskSchema, type CreateTaskData, type UpdateTaskData } from "../../schemas/tasks"
+import { formatDateForInput, formatDateForSubmit } from "../../lib/dateUtils"
 import Button from "../../components/button"
 import Input from "../../components/input"
 import Loading from "../../components/loading"
@@ -22,15 +23,10 @@ const TaskFormPage = () => {
 
     useEffect(() => {
         if (isEditing && task) {
-            // Converte ISO string para formato YYYY-MM-DD do input date
-            const dateForInput = task.dataParaConclusao 
-                ? new Date(task.dataParaConclusao).toISOString().split('T')[0]
-                : '';
-                
             reset({
                 titulo: task.titulo,
                 descricao: task.descricao,
-                dataParaConclusao: dateForInput,
+                dataParaConclusao: formatDateForInput(task.dataParaConclusao),
                 urgencia: task.urgencia
             })
         }
@@ -38,10 +34,16 @@ const TaskFormPage = () => {
 
     const onSubmit = async (data: CreateTaskData | UpdateTaskData) => {
         try {
+            // Formata a data corretamente para envio
+            const formattedData = {
+                ...data,
+                dataParaConclusao: formatDateForSubmit(data.dataParaConclusao)
+            };
+
             if (isEditing && id) {
-                await updateTask(Number(id), data as UpdateTaskData)
+                await updateTask(Number(id), formattedData as UpdateTaskData)
             } else {
-                await addTask(data as CreateTaskData)
+                await addTask(formattedData as CreateTaskData)
             }
             navigate("/")
         } catch (error) {

@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
-import Input from "../../components/input"
-import Button from "../../components/button"
-import { taskSearchParamsSchema, type TaskSearchParams } from "../../schemas/tasks"
-import { useTaskStore } from "../../store/taskStore"
+import Input from "./input"
+import Button from "./button"
+import { taskSearchParamsSchema, type TaskSearchParams } from "../schemas/tasks"
+import { useTaskStore } from "../store/taskStore"
 import { FaSearch } from "react-icons/fa"
 
 const SearchBar = () => {

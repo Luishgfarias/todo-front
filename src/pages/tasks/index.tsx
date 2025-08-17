@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useTaskStore } from "../../store/taskStore"
-import SearchBar from "./searchBar"
+import SearchBar from "../../components/searchBar"
 import CardTask from "../../components/cardTask"
 import Loading from "../../components/loading"
 import { FaPlus, FaTrashAlt } from "react-icons/fa"
