@@ -42,6 +42,9 @@ const CardTask = (task: Task) => {
     }
 
     const borderColor = () => {
+        if (task.concluida) {
+            return "border-green-500";
+        }
         switch (task.urgencia) {
             case "PADRAO":
                 return "border-gray-200";
