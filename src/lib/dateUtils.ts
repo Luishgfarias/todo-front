@@ -7,16 +7,13 @@ export const formatDateForDisplay = (dateString: string | null | undefined): str
     if (!dateString) return "Não informado";
     
     try {
-        // Se for apenas uma data (YYYY-MM-DD), adiciona horário local para evitar problemas de timezone
         const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(dateString);
         
         let date: Date;
         if (isDateOnly) {
-            // Para datas apenas (sem hora), cria a data no timezone local
             const [year, month, day] = dateString.split('-').map(Number);
-            date = new Date(year, month - 1, day); // month é 0-indexed
+            date = new Date(year, month - 1, day);
         } else {
-            // Para datas com horário, usa normalmente
             date = new Date(dateString);
         }
         
@@ -37,7 +34,6 @@ export const formatDateForInput = (dateString: string | null | undefined): strin
     
     try {
         const date = new Date(dateString);
-        // Ajusta para timezone local para evitar mudança de dia
         const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
         return localDate.toISOString().split('T')[0];
     } catch (error) {
@@ -55,13 +51,12 @@ export const formatDateForSubmit = (dateString: string | null | undefined): stri
     if (!dateString) return undefined;
     
     try {
-        // Cria a data no timezone local para evitar mudança de dia
         const [year, month, day] = dateString.split('-').map(Number);
-        const date = new Date(year, month - 1, day, 12, 0, 0); // meio-dia para evitar problemas de timezone
+        const date = new Date(year, month - 1, day, 12, 0, 0);
         
         return date.toISOString();
     } catch (error) {
         console.error("Erro ao formatar data para envio:", error);
-        return dateString; // Retorna original em caso de erro
+        return dateString;
     }
 };

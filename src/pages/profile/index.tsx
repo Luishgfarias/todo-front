@@ -11,18 +11,14 @@ import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
-    const { user, updateMe, deleteMe, loadMe, isLoadingProfile } = useAuthStore();
+    const { user, updateMe, deleteMe, isLoadingProfile } = useAuthStore();
     const navigate = useNavigate();
     
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: zodResolver(updateUserSchema)
     });
 
-    useEffect(() => {
-        if (!user) {
-            loadMe();
-        }
-    }, [user, loadMe]);
+
 
     useEffect(() => {
         if (user && isEditing) {
@@ -44,17 +40,12 @@ const ProfilePage = () => {
     };
 
     const onSubmit = async (data: UpdateUserSchema) => {
-        try {
-            // Remove campos vazios do objeto
-            const updateData = Object.fromEntries(
-                Object.entries(data).filter(([_, value]) => value && value.trim() !== "")
-            ) as UpdateUserSchema;
-            
-            await updateMe(updateData);
-            setIsEditing(false);
-        } catch (error) {
-            // Erro já tratado no store
-        }
+        const updateData = Object.fromEntries(
+            Object.entries(data).filter(([_, value]) => value && value.trim() !== "")
+        ) as UpdateUserSchema;
+        
+        await updateMe(updateData);
+        setIsEditing(false);
     };
 
     const handleDeleteAccount = async () => {
@@ -70,12 +61,8 @@ const ProfilePage = () => {
         });
 
         if (result.isConfirmed) {
-            try {
-                await deleteMe();
-                navigate("/auth/login");
-            } catch (error) {
-                // Erro já tratado no store
-            }
+            await deleteMe();
+            navigate("/auth/login");
         }
     };
 

@@ -33,22 +33,17 @@ const TaskFormPage = () => {
     }, [task, isEditing, reset])
 
     const onSubmit = async (data: CreateTaskData | UpdateTaskData) => {
-        try {
-            // Formata a data corretamente para envio
-            const formattedData = {
-                ...data,
-                dataParaConclusao: formatDateForSubmit(data.dataParaConclusao)
-            };
+        const formattedData = {
+            ...data,
+            dataParaConclusao: formatDateForSubmit(data.dataParaConclusao)
+        };
 
-            if (isEditing && id) {
-                await updateTask(Number(id), formattedData as UpdateTaskData)
-            } else {
-                await addTask(formattedData as CreateTaskData)
-            }
-            navigate("/")
-        } catch (error) {
-            // Erro já tratado no store
+        if (isEditing && id) {
+            await updateTask(Number(id), formattedData as UpdateTaskData)
+        } else {
+            await addTask(formattedData as CreateTaskData)
         }
+        navigate("/")
     }
 
     const handleBack = () => {

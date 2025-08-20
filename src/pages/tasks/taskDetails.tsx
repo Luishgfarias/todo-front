@@ -24,7 +24,8 @@ const TaskDetails = () => {
             cancelButtonText: 'Cancelar'
         });
         if (result.isConfirmed) {
-            deleteTask(task.id);
+            await deleteTask(task.id);
+            navigate("/");
         }
     }
     const handleEdit = () => {

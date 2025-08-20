@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
+import { userService } from '../services/userService'
 import Button from './button'
 import logo from '../assets/logo.svg'
 import miniLogo from '../assets/mini-logo.svg'
@@ -7,9 +9,15 @@ import Swal from 'sweetalert2'
 
 export function AppHeader() {
     const location = useLocation()
-    const { isAuthenticated, logout } = useAuthStore()
+    const { isAuthenticated, user, loadMe } = useAuthStore()
     const navigate = useNavigate()
     const isTasksPage = location.pathname === '/'
+
+    useEffect(() => {
+        if (isAuthenticated && !user) {
+            loadMe();
+        }
+    }, [isAuthenticated, user, loadMe]);
 
     const handleLogout = async () => {
         const result = await Swal.fire({
@@ -24,7 +32,7 @@ export function AppHeader() {
         });
 
         if (result.isConfirmed) {
-            logout();
+            userService.logout();
         }
     }
 
